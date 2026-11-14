@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASTRO QUEST – Junior Astronaut Mission Trainer</title>
+  <!-- Google Fonts: Fredoka (Playful rounded display) & Quicksand (Soft, legible body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Dynamic Background Canvas for Twinkling Stars & Shooting Stars -->
+  <canvas id="starfieldCanvas"></canvas>
+
+  <!-- Ambient Floating Space Elements in Background -->
+  <div class="space-ambient-objects" aria-hidden="true">
+    <div class="ambient-planet planet-lavender"></div>
+    <div class="ambient-planet planet-cyan"></div>
+    <div class="ambient-planet planet-pink"></div>
+    <div class="ambient-nebula nebula-1"></div>
+    <div class="ambient-nebula nebula-2"></div>
+  </div>
+
+  <!-- Main Navigation Bar -->
+  <header class="navbar" id="topNav">
+    <div class="container nav-container">
+      <a href="#home" class="brand-logo" id="brandLogo">
+        <!-- Cute SVG Rocket Logo -->
+        <div class="logo-icon-wrapper">
+          <svg class="logo-rocket-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M32 4C24 14 20 28 20 40C20 45 23 49 26 50L32 47L38 50C41 49 44 45 44 40C44 28 40 14 32 4Z" fill="url(#rocketGrad)" />
+            <path d="M20 36L10 44C8 46 9 50 12 50L20 48V36Z" fill="#FF7AC6" />
+            <path d="M44 36L54 44C56 46 55 50 52 50L44 48V36Z" fill="#FF7AC6" />
+            <circle cx="32" cy="26" r="6" fill="#0D0221" stroke="#38EFFF" stroke-width="2.5" />
+            <circle cx="30" cy="24" r="2" fill="#FFFFFF" />
+            <!-- Thruster Fire -->
+            <path class="flame-anim" d="M27 50C27 58 32 63 32 63C32 63 37 58 37 50H27Z" fill="#FDE047" />
+            <defs>
+              <linearGradient id="rocketGrad" x1="20" y1="4" x2="44" y2="50" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FFFFFF" />
+                <stop offset="0.7" stop-color="#E2E8F0" />
+                <stop offset="1" stop-color="#C084FC" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-title">ASTRO QUEST</span>
+          <span class="logo-tag">Junior Astronaut Trainer</span>
+        </div>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="nav-menu" id="navMenu">
+        <ul class="nav-links">
+          <li><a href="#home" class="nav-link active">Home</a></li>
+          <li><a href="#training" class="nav-link">Training</a></li>
+          <li><a href="#missions" class="nav-link">Missions</a></li>
+          <li><a href="#planet-hopper" class="nav-link">Space Quiz</a></li>
+          <li><a href="#achievements" class="nav-link">Achievements</a></li>
+        </ul>
+      </nav>
+
+      <!-- Right Utility Bar: Audio Toggle & Cadet Badge -->
+      <div class="nav-actions">
+        <button id="soundToggleBtn" class="pill-btn sound-btn" title="Toggle Cosmic Sounds" aria-label="Toggle Cosmic Sounds">
+          <span class="sound-icon">🔊</span>
+          <span class="sound-text">Sound ON</span>
+        </button>
+        <button class="pill-btn cadet-badge-btn" id="cadetStatusBtn">
+          <span class="cadet-rank-star">⭐</span>
+          <span class="cadet-label">Cadet Lvl 1</span>
+        </button>
+        <!-- Mobile Hamburger Toggle -->
+        <button class="mobile-toggle" id="mobileMenuBtn" aria-label="Open Navigation Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero-section" id="home">
+      <div class="container hero-grid">
+        <!-- Hero Text & CTA -->
+        <div class="hero-content">
+          <div class="mission-status-pill">
+            <span class="status-dot"></span>
+            <span>MISSION CONTROL STATUS: READY FOR LAUNCH</span>
+          </div>
+
+          <h1 class="hero-headline">
+            HEY, JUNIOR ASTRONAUT! <br>
+            <span class="highlight-gradient">READY FOR A SPACE ADVENTURE?</span>
+          </h1>
+
+          <p class="hero-description">
+            Put on your spacesuit, cadet! Blast off into our super fun flight simulator where you'll build cosmic rockets, decode secret alien signals, explore mysterious planets, and train with your very own <strong>AI astronaut co-pilot, ASTRO!</strong>
+          </p>
+
+          <!-- Action Buttons -->
+          <div class="hero-cta-group">
+            <button class="playful-btn btn-primary" id="startAdventureBtn">
+              <span class="btn-icon">🚀</span>
+              <span class="btn-text">Start Your Adventure</span>
+              <span class="btn-sparkle">✨</span>
+            </button>
+            <button class="playful-btn btn-secondary" id="meetAstroBtn">
+              <span class="btn-icon">🤖</span>
+              <span class="btn-text">Chat with ASTRO AI</span>
+            </button>
+          </div>
+
+          <!-- Space Cadet Stats Ticker -->
+          <div class="cadet-stats-bar">
+            <div class="stat-card">
+              <span class="stat-number" id="planetsDiscoveredCount">8</span>
+              <span class="stat-caption">Planets to Explore</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-card">
+              <span class="stat-number">1,420+</span>
+              <span class="stat-caption">Junior Cadets Active</span>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-card">
+              <span class="stat-number">12</span>
+              <span class="stat-caption">Space Badges to Earn</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Visual: Floating Cute Astronaut Illustration -->
+        <div class="hero-character-col">
+          <div class="hero-character-stage">
+            <!-- Glowing Orbit Rings -->
+            <div class="orbit-ring orbit-outer"></div>
+            <div class="orbit-ring orbit-inner"></div>
+
+            <!-- Orbiting Mini Moon -->
+            <div class="orbiting-moon">
+              <span class="moon-face">🌕</span>
+            </div>
+
+            <!-- Orbiting Cute Alien UFO -->
+            <div class="orbiting-ufo" title="Friendly Alien Scout!">
+              <svg viewBox="0 0 60 40" class="ufo-svg">
+                <ellipse cx="30" cy="18" rx="14" ry="12" fill="#38EFFF" opacity="0.8" />
+                <circle cx="30" cy="16" r="6" fill="#4ADE80" />
+                <circle cx="30" cy="15" r="2.5" fill="#0D0221" />
+                <ellipse cx="30" cy="25" rx="28" ry="9" fill="#FF7AC6" />
+                <circle cx="15" cy="26" r="2.5" fill="#FDE047" />
+                <circle cx="30" cy="27" r="2.5" fill="#FDE047" />
+                <circle cx="45" cy="26" r="2.5" fill="#FDE047" />
+                <polygon points="22,33 16,39 20,39" fill="#C084FC" />
+                <polygon points="38,33 44,39 40,39" fill="#C084FC" />
+              </svg>
+            </div>
+
+            <!-- Big Cute Floating Astronaut (SVG) -->
+            <div class="astronaut-character floating-anim" id="heroAstronaut">
+              <svg class="astronaut-svg" viewBox="0 0 240 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Astronaut Life-Support Backpack -->
+                <rect x="42" y="90" width="36" height="88" rx="14" fill="#94A3B8" />
+                <rect x="162" y="90" width="36" height="88" rx="14" fill="#94A3B8" />
+                <rect x="48" y="96" width="24" height="40" rx="6" fill="#38EFFF" opacity="0.6" />
+                <rect x="168" y="96" width="24" height="40" rx="6" fill="#38EFFF" opacity="0.6" />
+
+                <!-- Oxygen Hose / Tether -->
+                <path d="M50 160 C 20 200, 10 240, 30 270" stroke="#38EFFF" stroke-width="6" stroke-linecap="round" fill="none" opacity="0.75" />
+
+                <!-- Cute Spacesuit Body -->
+                <rect x="68" y="105" width="104" height="95" rx="36" fill="#F8FAFC" />
+                <rect x="80" y="120" width="80" height="60" rx="18" fill="#E2E8F0" />
+                
+                <!-- Mission Badge & Chest Controls -->
+                <circle cx="95" cy="140" r="7" fill="#FF7AC6" />
+                <circle cx="95" cy="140" r="3" fill="#FFFFFF" />
+                <rect x="110" y="134" width="34" height="8" rx="4" fill="#38EFFF" />
+                <rect x="110" y="146" width="22" height="6" rx="3" fill="#FDE047" />
+                <circle cx="140" cy="149" r="4" fill="#4ADE80" />
+
+                <!-- Left Leg -->
+                <rect x="76" y="190" width="34" height="52" rx="16" fill="#F8FAFC" />
+                <rect x="72" y="235" width="42" height="20" rx="10" fill="#C084FC" />
+
+                <!-- Right Leg -->
+                <rect x="130" y="190" width="34" height="52" rx="16" fill="#F8FAFC" />
+                <rect x="126" y="235" width="42" height="20" rx="10" fill="#C084FC" />
+
+                <!-- Left Arm (Holding Cosmic Flag) -->
+                <path d="M72 120 C 40 135, 35 160, 52 180" stroke="#F8FAFC" stroke-width="26" stroke-linecap="round" fill="none" />
+                <circle cx="56" cy="184" r="14" fill="#FF7AC6" />
+
+                <!-- Right Arm (Waving!) -->
+                <g class="waving-arm-group">
+                  <path d="M168 120 C 195 105, 205 75, 195 55" stroke="#F8FAFC" stroke-width="26" stroke-linecap="round" fill="none" />
+                  <circle cx="195" cy="50" r="14" fill="#FF7AC6" />
+                  <!-- Glove Fingers Waving -->
+                  <circle cx="198" cy="42" r="5" fill="#FF9EBB" />
+                  <circle cx="205" cy="48" r="4" fill="#FF9EBB" />
+                </g>
+
+                <!-- Big Round Space Helmet -->
+                <circle cx="120" cy="80" r="62" fill="#F8FAFC" />
+                
+                <!-- Helmet Ears / Communication Antennas -->
+                <rect x="52" y="70" width="10" height="20" rx="5" fill="#C084FC" />
+                <rect x="178" y="70" width="10" height="20" rx="5" fill="#C084FC" />
+                <line x1="183" y1="70" x2="195" y2="40" stroke="#C084FC" stroke-width="4" stroke-linecap="round" />
+                <circle cx="196" cy="38" r="6" fill="#FDE047" class="pulse-beacon" />
+
+                <!-- Golden Cosmic Visor with Reflection -->
+                <ellipse cx="120" cy="82" rx="46" ry="38" fill="url(#visorGrad)" stroke="#38EFFF" stroke-width="4" />
+                
+                <!-- Visor Eyes (Friendly & Cute!) -->
+                <ellipse cx="106" cy="80" rx="6" ry="9" fill="#0D0221" />
+                <ellipse cx="134" cy="80" rx="6" ry="9" fill="#0D0221" />
+                <circle cx="108" cy="77" r="2.5" fill="#FFFFFF" />
+                <circle cx="136" cy="77" r="2.5" fill="#FFFFFF" />
+                <path d="M114 94 Q 120 100 126 94" stroke="#0D0221" stroke-width="3" stroke-linecap="round" fill="none" />
+
+                <!-- Visor Glass Reflection highlight -->
+                <path d="M88 64 C 98 54, 126 52, 148 58" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" opacity="0.6" />
+
+                <defs>
+                  <linearGradient id="visorGrad" x1="80" y1="50" x2="160" y2="120" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#FDE047" />
+                    <stop offset="0.6" stop-color="#FF9EBB" />
+                    <stop offset="1" stop-color="#C084FC" />
+                  </linearGradient>
+                </defs>
+              </svg>
+
+              <!-- Speech Bubble from Hero Character -->
+              <div class="speech-bubble hero-bubble">
+                <span class="bubble-sparkle">⭐</span>
+                <span>"All systems go! Let's explore the galaxy together!"</span>
+              </div>
+            </div>
+
+            <!-- Floating Little Saturn & Star Decors -->
+            <div class="floating-saturn-badge">
+              <svg viewBox="0 0 80 50" class="saturn-svg">
+                <circle cx="40" cy="25" r="16" fill="#FF7AC6" />
+                <ellipse cx="40" cy="25" rx="36" ry="9" fill="none" stroke="#FDE047" stroke-width="5" transform="rotate(-15 40 25)" />
+                <circle cx="40" cy="25" r="16" fill="url(#saturnShade)" />
+                <defs>
+                  <linearGradient id="saturnShade" x1="24" y1="9" x2="56" y2="41">
+                    <stop stop-color="#FF9EBB" stop-opacity="0" />
+                    <stop offset="1" stop-color="#241442" stop-opacity="0.6" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTRODUCING THE SPACE TRAINING GAME (TRAINING MODULES) -->
+    <section class="section training-section" id="training">
+      <div class="container">
+        <div class="section-header text-center">
+          <div class="section-tag-pill">🎯 MISSION MODULES</div>
+          <h2 class="section-title">CHOOSE YOUR ASTRONAUT TRAINING SECTOR</h2>
+          <p class="section-subtitle">
+            Master real space science through fun, interactive arcade simulators designed especially for Cadets aged 7 to 12!
+          </p>
+        </div>
+
+        <div class="training-grid">
+          <!-- Module 1: Rocket Physics -->
+          <div class="card training-card module-card-pink" data-module="rocket">
+            <div class="card-badge">SECTOR 1</div>
+            <div class="card-icon-bubble">
+              <span class="emoji-icon">🚀</span>
+            </div>
+            <h3 class="card-title">Rocket Builder Lab</h3>
+            <p class="card-text">
+              Assemble multistage boosters, balance fuel weight, and calculate escape velocity to break free of Earth's gravity pull!
+            </p>
+            <div class="card-footer">
+              <span class="skill-tag">🔬 Propulsion Science</span>
+              <button class="card-action-btn" data-action="explore-rocket">Launch Sim &rarr;</button>
+            </div>
+          </div>
+
+          <!-- Module 2: Solar Explorer -->
+          <div class="card training-card module-card-cyan" data-module="solar">
+            <div class="card-badge">SECTOR 2</div>
+            <div class="card-icon-bubble">
+              <span class="emoji-icon">🪐</span>
+            </div>
+            <h3 class="card-title">Solar System Safari</h3>
+            <p class="card-text">
+              Voyage through the Asteroid Belt, dare to fly by the boiling Sun, and visit the giant storms of Jupiter and Saturn's ice rings!
+            </p>
+            <div class="card-footer">
+              <span class="skill-tag">🌌 Planetary Astronomy</span>
+              <button class="card-action-btn" data-action="explore-solar">Explore Worlds &rarr;</button>
+            </div>
+          </div>
+
+          <!-- Module 3: Alien Code Breaker -->
+          <div class="card training-card module-card-yellow" data-module="alien">
+            <div class="card-badge">SECTOR 3</div>
+            <div class="card-icon-bubble">
+              <span class="emoji-icon">👽</span>
+            </div>
+            <h3 class="card-title">Alien Signal Decoder</h3>
+            <p class="card-text">
+              Deep space radio telescopes just detected mysterious cosmic rhythms! Solve colorful math patterns and decode the friendly alien message.
+            </p>
+            <div class="card-footer">
+              <span class="skill-tag">🧩 Logic & Cryptography</span>
+              <button class="card-action-btn" data-action="explore-alien">Decode Signal &rarr;</button>
+            </div>
+          </div>
+
+          <!-- Module 4: Zero-G Spacewalk -->
+          <div class="card training-card module-card-lavender" data-module="zerog">
+            <div class="card-badge">SECTOR 4</div>
+            <div class="card-icon-bubble">
+              <span class="emoji-icon">🧑‍🚀</span>
+            </div>
+            <h3 class="card-title">Zero-G Spacewalk Sim</h3>
+            <p class="card-text">
+              Use nitrogen jetpack thrusters to float around the International Space Station, fix solar panels, and capture wandering meteorites!
+            </p>
+            <div class="card-footer">
+              <span class="skill-tag">⚙️ Zero-Gravity Physics</span>
+              <button class="card-action-btn" data-action="explore-zerog">Test Jetpack &rarr;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE PLANET HOPPER & SPACE QUIZ TEASER -->
+    <section class="section planet-hopper-section" id="planet-hopper">
+      <div class="container">
+        <div class="section-header text-center">
+          <div class="section-tag-pill">🌍 PLANET HOPPER QUIZ</div>
+          <h2 class="section-title">CLICK A PLANET TO DISCOVER COSMIC SECRETS!</h2>
+          <p class="section-subtitle">
+            Every world has wild superpowers. Tap any planet to reveal funny kid facts and test your space knowledge!
+          </p>
+        </div>
+
+        <!-- Planet Selector Bar -->
+        <div class="planets-carousel" id="planetsBar">
+          <button class="planet-tab active" data-planet="mercury">
+            <span class="planet-orb orb-mercury"></span>
+            <span class="planet-name">Mercury</span>
+          </button>
+          <button class="planet-tab" data-planet="venus">
+            <span class="planet-orb orb-venus"></span>
+            <span class="planet-name">Venus</span>
+          </button>
+          <button class="planet-tab" data-planet="earth">
+            <span class="planet-orb orb-earth"></span>
+            <span class="planet-name">Earth</span>
+          </button>
+          <button class="planet-tab" data-planet="mars">
+            <span class="planet-orb orb-mars"></span>
+            <span class="planet-name">Mars</span>
+          </button>
+          <button class="planet-tab" data-planet="jupiter">
+            <span class="planet-orb orb-jupiter"></span>
+            <span class="planet-name">Jupiter</span>
+          </button>
+          <button class="planet-tab" data-planet="saturn">
+            <span class="planet-orb orb-saturn"></span>
+            <span class="planet-name">Saturn</span>
+          </button>
+        </div>
+
+        <!-- Planet Fact Display Card (Dynamically Updated) -->
+        <div class="planet-detail-card" id="planetFactDisplay">
+          <div class="planet-visual-col">
+            <div class="big-planet-preview" id="planetIllustration">
+              <div class="planet-sphere preview-mercury"></div>
+            </div>
+            <div class="planet-fun-tag" id="planetFunTag">Fastest Orbit in the Solar System! 🏎️</div>
+          </div>
+          <div class="planet-info-col">
+            <div class="planet-meta">
+              <span class="badge-mini" id="planetDistance">57.9 Million km from Sun</span>
+              <span class="badge-mini badge-cyan" id="planetTemp">Day: 430°C | Night: -180°C</span>
+            </div>
+            <h3 class="planet-heading" id="planetTitle">Mercury – The Speedy Cosmic Pebble</h3>
+            <p class="planet-body" id="planetFactText">
+              Mercury zooms around the Sun in just 88 days! That means on Mercury, your birthday would happen every 3 months! But wear a heavy coat: at night it gets colder than your home freezer, and during the day it's hot enough to melt lead!
+            </p>
+            <div class="planet-quiz-box">
+              <div class="quiz-question-label">⚡ QUICK CADET POP QUIZ:</div>
+              <p class="quiz-question-text" id="planetQuizQuestion">Does Mercury have any moons orbiting it?</p>
+              <div class="quiz-options-group" id="planetQuizOptions">
+                <button class="quiz-btn" data-correct="true">Nope, Zero Moons! 🌑</button>
+                <button class="quiz-btn" data-correct="false">Yes, Two Moons! 🌕🌕</button>
+              </div>
+              <div class="quiz-feedback" id="planetQuizFeedback"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACHIEVEMENTS & SPACE BADGES SECTION -->
+    <section class="section achievements-section" id="achievements">
+      <div class="container">
+        <div class="section-header text-center">
+          <div class="section-tag-pill">🏅 CADET AWARDS</div>
+          <h2 class="section-title">COLLECT YOUR ASTRONAUT MISSION BADGES</h2>
+          <p class="section-subtitle">
+            Earn glowing mission badges as you complete quizzes, chat with ASTRO, and master space flight training!
+          </p>
+        </div>
+
+        <div class="badges-grid">
+          <div class="badge-card unlocked">
+            <div class="badge-icon-box">
+              <span class="badge-emoji">🌟</span>
+              <div class="sparkle-ring"></div>
+            </div>
+            <h4 class="badge-name">First Orbit Cadet</h4>
+            <p class="badge-desc">Stepped aboard ASTRO QUEST Mission Control</p>
+            <span class="badge-status-label status-unlocked">UNLOCKED! 🎉</span>
+          </div>
+
+          <div class="badge-card" id="chatBadgeCard">
+            <div class="badge-icon-box">
+              <span class="badge-emoji">🤖</span>
+            </div>
+            <h4 class="badge-name">AI Co-Pilot Friend</h4>
+            <p class="badge-desc">Ask ASTRO 3 cosmic space science questions</p>
+            <span class="badge-status-label" id="chatBadgeStatus">0 / 3 Questions</span>
+          </div>
+
+          <div class="badge-card" id="planetQuizBadge">
+            <div class="badge-icon-box">
+              <span class="badge-emoji">🪐</span>
+            </div>
+            <h4 class="badge-name">Planet Pathfinder</h4>
+            <p class="badge-desc">Ace your first Planet Hopper pop quiz</p>
+            <span class="badge-status-label" id="quizBadgeStatus">Locked 🔒</span>
+          </div>
+
+          <div class="badge-card">
+            <div class="badge-icon-box">
+              <span class="badge-emoji">🚀</span>
+            </div>
+            <h4 class="badge-name">Supernova Master</h4>
+            <p class="badge-desc">Complete all 4 astronaut training sectors</p>
+            <span class="badge-status-label">Locked 🔒</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MISSIONS TEASER CALLOUT -->
+    <section class="section missions-callout-section" id="missions">
+      <div class="container">
+        <div class="missions-banner">
+          <div class="banner-content">
+            <span class="banner-tag">🚨 NEXT EXPEDITION DEPARTING SOON</span>
+            <h2 class="banner-title">MISSION TO MARS: ROVER RECOVERY EXPEDITION</h2>
+            <p class="banner-text">
+              Command the red planet rover, navigate treacherous dust storms on the slopes of Olympus Mons, and collect ancient Martian river rock samples!
+            </p>
+            <div class="banner-buttons">
+              <button class="playful-btn btn-primary" id="preRegisterMissionBtn">
+                <span>Join Expedition Crew</span> <span>🚀</span>
+              </button>
+            </div>
+          </div>
+          <div class="banner-graphic">
+            <div class="cute-rover-card">
+              <span class="rover-emoji">🚜</span>
+              <span class="rover-caption">Perseverance Jr.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================================== -->
+  <!-- AI FEATURE: ASTRO - CUTE AI ASTRONAUT COMPANION -->
+  <!-- ============================================== -->
+
+  <!-- Floating Sticky Mascot Launcher Button -->
+  <aside class="astro-floating-widget" id="astroWidgetLauncher" aria-label="Open ASTRO AI Chat">
+    <div class="astro-mascot-head" id="astroHeadButton" role="button" tabindex="0">
+      <div class="astro-avatar-circle">
+        <!-- Cute ASTRO Face SVG -->
+        <svg viewBox="0 0 100 100" class="astro-head-svg">
+          <!-- Helmet -->
+          <circle cx="50" cy="50" r="44" fill="#F8FAFC" stroke="#C084FC" stroke-width="4" />
+          <!-- Antenna -->
+          <line x1="50" y1="6" x2="50" y2="1" stroke="#FF7AC6" stroke-width="4" stroke-linecap="round" />
+          <circle cx="50" cy="2" r="4" fill="#FDE047" class="pulse-beacon" />
+          <!-- Visor -->
+          <rect x="18" y="26" width="64" height="48" rx="24" fill="#0D0221" stroke="#38EFFF" stroke-width="3" />
+          <!-- Blinking Cute Eyes -->
+          <circle cx="38" cy="48" r="6" fill="#38EFFF" class="astro-eye" />
+          <circle cx="62" cy="48" r="6" fill="#38EFFF" class="astro-eye" />
+          <!-- Cheerful Smile -->
+          <path d="M42 58 Q 50 66 58 58" stroke="#FDE047" stroke-width="3" stroke-linecap="round" fill="none" />
+          <!-- Visor Reflection -->
+          <path d="M26 34 Q 38 30 52 32" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.6" />
+        </svg>
+      </div>
+      <div class="astro-pulse-beacon"></div>
+      <div class="astro-launcher-tooltip">
+        <span class="tooltip-wave">👋</span>
+        <span class="tooltip-text">Ask ASTRO AI!</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Expanded ASTRO Chatbot Interface / Drawer -->
+  <div class="astro-chat-modal" id="astroChatModal" aria-hidden="true">
+    <div class="astro-chat-window">
+      <!-- Chat Header -->
+      <div class="chat-header">
+        <div class="chat-header-profile">
+          <div class="chat-avatar-mini">
+            <svg viewBox="0 0 100 100" class="astro-head-svg-mini">
+              <circle cx="50" cy="50" r="44" fill="#F8FAFC" stroke="#C084FC" stroke-width="4" />
+              <rect x="18" y="26" width="64" height="48" rx="24" fill="#0D0221" stroke="#38EFFF" stroke-width="3" />
+              <circle cx="38" cy="48" r="5" fill="#38EFFF" />
+              <circle cx="62" cy="48" r="5" fill="#38EFFF" />
+              <path d="M42 58 Q 50 65 58 58" stroke="#FDE047" stroke-width="3" stroke-linecap="round" fill="none" />
+            </svg>
+            <span class="online-dot"></span>
+          </div>
+          <div class="chat-title-info">
+            <h3 class="chat-name">ASTRO AI Co-Pilot 🤖</h3>
+            <span class="chat-sub">Junior Astronaut Flight Assistant • Orbiting Earth</span>
+          </div>
+        </div>
+
+        <div class="chat-header-actions">
+          <!-- Voice speech toggle -->
+          <button class="chat-tool-btn" id="voiceReadToggle" title="Toggle ASTRO's Voice Read-Aloud" aria-label="Toggle Voice">
+            <span id="voiceIcon">🔈</span>
+          </button>
+          <!-- Minimize / Close button -->
+          <button class="chat-tool-btn chat-close-btn" id="closeChatBtn" title="Close Chat" aria-label="Close Chat">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Suggested Questions Chips -->
+      <div class="chat-quick-questions">
+        <span class="quick-title">Cadet Quick Questions:</span>
+        <div class="quick-chips-scroll">
+          <button class="quick-chip-btn" data-question="Why do we need oxygen?">
+            🫁 Why do we need oxygen?
+          </button>
+          <button class="quick-chip-btn" data-question="Tell me about the Moon.">
+            🌕 Tell me about the Moon
+          </button>
+          <button class="quick-chip-btn" data-question="How hot is the Sun?">
+            ☀️ How hot is the Sun?
+          </button>
+          <button class="quick-chip-btn" data-question="Do astronauts eat pizza in space?">
+            🍕 Do astronauts eat pizza?
+          </button>
+          <button class="quick-chip-btn" data-question="What is a Black Hole?">
+            🕳️ What is a Black Hole?
+          </button>
+          <button class="quick-chip-btn" data-question="How long does it take to get to Mars?">
+            🚀 How long to fly to Mars?
+          </button>
+        </div>
+      </div>
+
+      <!-- Messages Stream -->
+      <div class="chat-body" id="chatBody">
+        <!-- Initial Welcome Message from ASTRO -->
+        <div class="chat-msg astro-msg">
+          <div class="msg-avatar">
+            <span class="avatar-emoji">🧑‍🚀</span>
+          </div>
+          <div class="msg-bubble">
+            <div class="msg-author">ASTRO</div>
+            <p>
+              <strong>Bloop-bleep! 🚀</strong> Greetings, Junior Astronaut! I'm <strong>ASTRO</strong>, your AI Flight Co-Pilot aboard the ASTRO QUEST simulator.
+            </p>
+            <p>
+              I know all about gravity, glowing nebulae, rocket boosters, and alien planets. Tap one of the buttons above or type any cosmic question below! What shall we investigate first?
+            </p>
+            <span class="msg-timestamp">Just now</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Typing Indicator (Hidden by default) -->
+      <div class="typing-indicator" id="typingIndicator" style="display: none;">
+        <span class="indicator-avatar">🤖</span>
+        <div class="indicator-bubble">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+        <span class="indicator-text">ASTRO is scanning star archives...</span>
+      </div>
+
+      <!-- Chat Input Form -->
+      <form class="chat-input-bar" id="chatForm">
+        <input 
+          type="text" 
+          id="chatInput" 
+          class="chat-text-input" 
+          placeholder="Ask ASTRO anything about space... (e.g. Can aliens hear us?)" 
+          autocomplete="off"
+          maxlength="200"
+          required
+        />
+        <button type="submit" class="chat-send-btn" id="sendBtn" title="Send message" aria-label="Send message">
+          <span class="send-icon">🚀</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Interactive Modal for Sector Previews & Announcements -->
+  <div class="generic-modal" id="genericModal" aria-hidden="true">
+    <div class="generic-modal-backdrop" id="modalBackdrop"></div>
+    <div class="generic-modal-card">
+      <button class="modal-close-icon" id="genericModalClose">&times;</button>
+      <div class="modal-icon-badge" id="modalIcon">🚀</div>
+      <h3 class="modal-title" id="modalTitle">Mission Simulator Ready</h3>
+      <p class="modal-body" id="modalBody">Loading astronaut simulation data...</p>
+      <div class="modal-actions">
+        <button class="playful-btn btn-primary" id="modalConfirmBtn">Awesome, Let's Go!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti Canvas for Celebrations -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- FOOTER -->
+  <footer class="space-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <span class="footer-rocket">🚀</span>
+          <span class="footer-title">ASTRO QUEST</span>
+        </div>
+        <p class="footer-tagline">
+          Inspiring the next generation of stargazers, rocket scientists, and deep-space explorers aged 7–12.
+        </p>
+      </div>
+
+      <div class="footer-links-group">
+        <div class="footer-col">
+          <h4 class="footer-heading">Missions</h4>
+          <ul>
+            <li><a href="#training">Rocket Builder</a></li>
+            <li><a href="#training">Solar Explorer</a></li>
+            <li><a href="#training">Alien Signal</a></li>
+            <li><a href="#training">Zero-G Spacewalk</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">Cadet Tools</h4>
+          <ul>
+            <li><a href="#planet-hopper">Planet Hopper</a></li>
+            <li><a href="#achievements">Mission Badges</a></li>
+            <li><a href="#" id="footerAskAstro">Ask ASTRO AI</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4 class="footer-heading">Safety & Fun</h4>
+          <ul>
+            <li><span>🛡️ 100% Kid Safe</span></li>
+            <li><span>⭐ No Ads Ever</span></li>
+            <li><span>🚀 AI Co-Pilot Ready</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom text-center">
+      <p>© 2026 ASTRO QUEST – Junior Astronaut Mission Trainer. Made with cosmic wonder for curious young minds. 🛸</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
